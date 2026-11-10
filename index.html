@@ -8,7 +8,7 @@
 <!-- Chart.js для графиков (Задание 7) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- ColorCalendar для календаря (Задание 8) - Версия 1.0.6 -->
+<!-- ColorCalendar для календаря (Задание 8) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/color-calendar@1.0.6/dist/css/theme-basic.css">
 <script src="https://cdn.jsdelivr.net/npm/color-calendar@1.0.6/dist/bundle.js"></script>
 
@@ -25,7 +25,7 @@
   h2 { color: #333; }
   a { cursor: pointer; }
   
-  /* Ширина календаря, чтобы он не растягивался */
+  /* Ширина календаря */
   #color-calendar { width: 320px; margin-top: 10px; }
 </style>
 </head>
@@ -158,7 +158,6 @@
   <h2>Задание 8. Календарь</h2>
   <p>Выберите дату окончания семестра:</p>
   
-  <!-- Контейнер, в который библиотека вставит календарь -->
   <div id="color-calendar"></div>
   
   <p id="days-left" style="font-weight:bold; color: red; margin-top: 10px;"></p>
@@ -297,18 +296,18 @@ new Chart(document.getElementById('chartAge'), {
 });
 
 /* ================= ЗАДАНИЕ 8 ================= */
-// Ждем полной загрузки страницы
 document.addEventListener("DOMContentLoaded", function() {
   
-  // Функция для расчета и вывода дней
-  function updateDaysLeft(date) {
-    if (!date) return;
+  function updateDaysLeft(selectedDate) {
+    if (!selectedDate) return;
     
-    // Берем 25 декабря текущего года как конец семестра
-    var endDate = new Date(date.getFullYear(), 11, 25); 
+    var endDate = new Date(selectedDate.getFullYear(), 11, 25); 
     
-    // Вычисляем разницу в днях
-    var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
+    endDate.setHours(0,0,0,0);
+    var currentDate = new Date(selectedDate);
+    currentDate.setHours(0,0,0,0);
+    
+    var diff = Math.ceil((endDate - currentDate) / (1000 * 60 * 60 * 24));
     
     var msg = '';
     if (diff > 0) {
@@ -322,21 +321,44 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('days-left').textContent = msg;
   }
 
-  // Инициализируем календарь
   new Calendar({
     id: "#color-calendar",
-    selectedDate: new Date(), // Выделяем сегодняшнюю дату по умолчанию
-    
-    // ВНИМАНИЕ: В этой версии библиотеки правильное имя события - onSelectedDateChange
-    onSelectedDateChange: function(date) {
-      updateDaysLeft(date);
-    }
+    selectedDate: new Date()
   });
 
-  // Сразу считаем дни для сегодняшней даты при загрузке страницы
   updateDaysLeft(new Date());
+
+  var calendarContainer = document.getElementById('color-calendar');
+  
+  calendarContainer.addEventListener('click', function(e) {
+    var target = e.target;
+    
+    // Ищем кнопку или ячейку с датой внутри библиотеки
+    if (target && target.textContent && !isNaN(target.textContent.trim())) {
+      var day = parseInt(target.textContent.trim());
+      
+      // Ищем заголовок с месяцем и годом внутри нашего контейнера
+      var headerElement = calendarContainer.querySelector('.calendar__header');
+      if (!headerElement) return;
+      
+      var headerText = headerElement.textContent.trim(); // "Nov 2026"
+      var dateParts = headerText.split(' ');
+      
+      var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      var month = monthNames.indexOf(dateParts[0]);
+      var year = parseInt(dateParts[1]);
+      
+      if (month !== -1 && !isNaN(year) && !isNaN(day)) {
+        var clickedDate = new Date(year, month, day);
+        updateDaysLeft(clickedDate);
+      }
+    }
+  });
 });
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
