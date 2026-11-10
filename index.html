@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Лабораторная работа №10 — JavaScript</title>
 
-  <!-- Стили календаря ColorCalendar -->
+  <!-- Подключаем стили для календаря ColorCalendar -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/color-calendar@3.0.0/dist/css/theme-basic.css"
   >
 
   <style>
+    /* Базовые цвета страницы */
     :root {
       --page-bg: #f4f6fb;
       --card-bg: #ffffff;
@@ -35,6 +36,7 @@
       transition: background 0.2s, color 0.2s;
     }
 
+    /* Темная тема (меняются только цвета) */
     body.dark-theme {
       --page-bg: #171923;
       --card-bg: #242735;
@@ -44,6 +46,7 @@
       --accent-color: #9ba6ff;
     }
 
+    /* Светлая тема */
     body.light-theme {
       --page-bg: #fffdf4;
       --card-bg: #ffffff;
@@ -70,6 +73,7 @@
       color: var(--muted-color);
     }
 
+    /* Оформление блоков с заданиями */
     section {
       margin: 22px 0;
       padding: 20px;
@@ -138,6 +142,7 @@
       resize: vertical;
     }
 
+    /* Сетка для диаграмм */
     .charts {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -149,6 +154,7 @@
       padding: 10px;
     }
 
+    /* Стили для шахматной доски */
     .chess-table {
       border-collapse: collapse;
       margin-top: 14px;
@@ -195,7 +201,7 @@
     }
   </style>
 
-  <!-- Библиотеки диаграмм и календаря -->
+  <!-- Подключаем сами библиотеки -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/color-calendar@3.0.0/dist/bundle.js"></script>
 </head>
@@ -207,12 +213,13 @@
       Работа с JavaScript, событиями, формами и готовыми библиотеками.
     </p>
 
-    <!-- Задания 1–3 -->
+    <!-- ЗАДАНИЯ 1-3 -->
     <section>
       <h2>Задания 1–3. Размер и цвет текста, темы оформления</h2>
 
       <h3>Изменение размера шрифта</h3>
       <div class="link-list">
+        <!-- Вызываем функцию fontSize и передаем в нее размер в пикселях -->
         <a href="#" onclick="fontSize(16); return false;">Обычный размер</a>
         <a href="#" onclick="fontSize(20); return false;">Крупный размер</a>
         <a href="#" onclick="fontSize(24); return false;">Очень крупный размер</a>
@@ -220,11 +227,13 @@
 
       <h3>Изменение цвета текста</h3>
       <div class="link-list">
+        <!-- Вызываем функцию fontColor и передаем цвет -->
         <a href="#" onclick="fontColor('red'); return false;">Красный</a>
         <a href="#" onclick="fontColor('blue'); return false;">Синий</a>
         <a href="#" onclick="fontColor('black'); return false;">Черный</a>
       </div>
 
+      <!-- Абзацы, которые будут меняться -->
       <div id="textContent">
         <p>JavaScript позволяет изменять содержимое и оформление страницы.</p>
         <p>Для реакции на действия пользователя используются обработчики событий.</p>
@@ -233,16 +242,18 @@
 
       <h3>Тема оформления</h3>
       <div class="controls">
+        <!-- Передаем имя класса, который нужно добавить к body -->
         <button type="button" onclick="setTheme('light-theme')">Светлая тема</button>
         <button type="button" onclick="setTheme('dark-theme')">Темная тема</button>
         <button type="button" onclick="setTheme('')">Исходная тема</button>
       </div>
     </section>
 
-    <!-- Задание 4 -->
+    <!-- ЗАДАНИЕ 4 -->
     <section>
       <h2>Задание 4. Шахматная доска</h2>
       <label>
+        <!-- При изменении галочки вызываем toggleOnes -->
         <input id="showOnes" type="checkbox" checked onchange="toggleOnes()">
         Показывать единицы на клетках
       </label>
@@ -251,16 +262,19 @@
       </p>
 
       <script>
-        // Создаем таблицу 8 × 8 с помощью document.write.
-        var n = 8;
+        // Рисуем таблицу через document.write (как просили в задании)
+        var n = 8; // Размер доски 8х8
         document.write('<table border="1" class="chess-table">');
 
+        // Два цикла: i - строки, j - столбцы
         for (let i = 0; i < n; i++) {
           document.write('<tr>');
 
           for (let j = 0; j < n; j++) {
+            // Если сумма i+j четная - клетка черная, иначе белая
             const isBlack = (i + j) % 2 === 0;
             const cellClass = isBlack ? 'black' : 'white';
+            // Цифра 1 должна быть контрастной: на черном - белая, на белом - черная
             const numberColor = isBlack ? 'white' : 'black';
 
             document.write(
@@ -277,20 +291,23 @@
       </script>
     </section>
 
-    <!-- Задание 5 -->
+    <!-- ЗАДАНИЕ 5 -->
     <section>
       <h2>Задание 5. Проверка возраста</h2>
       <div class="form-row">
         <label for="age">Введите возраст:</label>
         <input id="age" type="number" min="0" placeholder="Например, 20">
+        <!-- Кнопка вызывает функцию checkAge -->
         <button type="button" onclick="checkAge()">Проверить возраст</button>
+        <!-- Сюда выводим результат -->
         <p id="ageResult" class="status" aria-live="polite"></p>
       </div>
     </section>
 
-    <!-- Задание 6 -->
+    <!-- ЗАДАНИЕ 6 -->
     <section>
       <h2>Задание 6. Форма обратной связи</h2>
+      <!-- onsubmit="return false;" чтобы страница не перезагружалась -->
       <form onsubmit="return false;">
         <div class="form-row">
           <label for="email">Электронная почта:</label>
@@ -302,12 +319,14 @@
           <textarea id="message" placeholder="Введите сообщение"></textarea>
         </div>
 
+        <!-- Кнопка вызывает validateFeedback -->
         <button type="button" onclick="validateFeedback()">Отправить</button>
+        <!-- Сюда выводим текст об успехе или ошибке -->
         <p id="feedbackResult" class="status" aria-live="polite"></p>
       </form>
     </section>
 
-    <!-- Задание 7 -->
+    <!-- ЗАДАНИЕ 7 -->
     <section>
       <h2>Задание 7. Диаграммы Chart.js</h2>
       <p class="note">
@@ -315,25 +334,27 @@
       </p>
 
       <div class="charts">
-        <!-- 1. Столбчатая диаграмма -->
+        <!-- Холст для первой диаграммы (столбчатой) -->
         <div class="chart-box">
           <canvas id="cityChart"></canvas>
         </div>
-        <!-- 2. Линейный график -->
+        <!-- Холст для второй диаграммы (линейной) -->
         <div class="chart-box">
           <canvas id="rateChart"></canvas>
         </div>
       </div>
     </section>
 
-    <!-- Задание 8 -->
+    <!-- ЗАДАНИЕ 8 -->
     <section>
       <h2>Задание 8. Календарь окончания семестра</h2>
       <p>
         Выберите дату окончания семестра в календаре — страница посчитает,
         сколько дней осталось.
       </p>
+      <!-- Сюда библиотека вставит календарь -->
       <div id="calendar"></div>
+      <!-- Сюда выведем количество дней -->
       <p id="semesterResult" class="status" aria-live="polite">
         Выберите дату в календаре.
       </p>
@@ -341,42 +362,51 @@
   </main>
 
   <script>
-    // Задания 1–2: меняем оформление всех абзацев внутри блока.
+    // --- ЗАДАНИЯ 1-2 ---
+    // Меняем размер шрифта у всех абзацев внутри блока textContent
     function fontSize(size) {
       document.querySelectorAll('#textContent p').forEach(function (paragraph) {
         paragraph.style.fontSize = size + 'px';
       });
     }
 
+    // Меняем цвет текста у всех абзацев внутри блока textContent
     function fontColor(color) {
       document.querySelectorAll('#textContent p').forEach(function (paragraph) {
         paragraph.style.color = color;
       });
     }
 
-    // Задание 3: устанавливаем одну из тем или возвращаем исходную.
+    // --- ЗАДАНИЕ 3 ---
+    // Устанавливаем тему. Если передали пустую строку, возвращаем исходную.
     function setTheme(themeName) {
+      // Сначала удаляем старые классы тем с body
       document.body.classList.remove('light-theme', 'dark-theme');
 
+      // Если имя темы не пустое, добавляем нужный класс
       if (themeName) {
         document.body.classList.add(themeName);
       }
     }
 
-    // Задание 4: показываем или скрываем единицы на доске.
+    // --- ЗАДАНИЕ 4 ---
+    // Скрываем или показываем единицы в зависимости от галочки
     function toggleOnes() {
       const isVisible = document.getElementById('showOnes').checked;
 
+      // Находим все цифры 1 на доске и меняем им видимость
       document.querySelectorAll('.chess-table .piece').forEach(function (piece) {
         piece.style.visibility = isVisible ? 'visible' : 'hidden';
       });
     }
 
-    // Задание 5: сравниваем введенный возраст с числом 18.
+    // --- ЗАДАНИЕ 5 ---
+    // Проверяем возраст
     function checkAge() {
       const ageInput = document.getElementById('age');
       const result = document.getElementById('ageResult');
 
+      // Если пусто или отрицательное число - ошибка
       if (ageInput.value === '' || Number(ageInput.value) < 0) {
         result.textContent = 'Введите корректный возраст.';
         return;
@@ -384,7 +414,7 @@
 
       const age = Number(ageInput.value);
 
-      // По заданию возраст должен быть строго больше 18
+      // В задании сказано "больше 18", поэтому проверяем строго > 18
       if (age > 18) {
         result.textContent = 'Возраст больше 18 лет.';
       } else {
@@ -392,20 +422,24 @@
       }
     }
 
-    // Задание 6: проверяем, что сообщение заполнено, а адрес содержит @ и точку.
+    // --- ЗАДАНИЕ 6 ---
+    // Проверяем почту и сообщение
     function validateFeedback() {
       const email = document.getElementById('email').value.trim();
       const message = document.getElementById('message').value.trim();
       const result = document.getElementById('feedbackResult');
 
+      // Сообщение не должно быть пустым
       if (message === '') {
         result.textContent = 'Введите сообщение.';
         return;
       }
 
+      // Ищем позицию @ и последней точки
       const atPosition = email.indexOf('@');
       const dotPosition = email.lastIndexOf('.');
 
+      // Проверяем: @ не в начале, точка после @ и не в конце, без пробелов
       const emailIsValid =
         atPosition > 0 &&
         dotPosition > atPosition + 1 &&
@@ -420,9 +454,10 @@
       result.textContent = 'Форма заполнена корректно.';
     }
 
-    // Задание 7: 1. Столбчатая диаграмма (Численность населения)
+    // --- ЗАДАНИЕ 7 ---
+    // Первая диаграмма - столбчатая (города)
     new Chart(document.getElementById('cityChart'), {
-      type: 'bar',
+      type: 'bar', // Тип: столбцы
       data: {
         labels: ['Город А', 'Город Б', 'Город В', 'Город Г'],
         datasets: [{
@@ -442,9 +477,9 @@
       }
     });
 
-    // Задание 7: 2. Линейный график (Ключевая ставка)
+    // Вторая диаграмма - линейная (ставка)
     new Chart(document.getElementById('rateChart'), {
-      type: 'line',
+      type: 'line', // Тип: линия
       data: {
         labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май'],
         datasets: [{
@@ -452,7 +487,7 @@
           data: [7.5, 7.5, 8.0, 8.5, 9.0],
           borderColor: 'blue',
           backgroundColor: 'lightblue',
-          fill: false
+          fill: false // Не закрашивать область под линией
         }]
       },
       options: {
@@ -466,29 +501,35 @@
       }
     });
 
-    // Задание 8: выбранная дата считается датой окончания семестра.
+    // --- ЗАДАНИЕ 8 ---
+    // Создаем календарь
     new Calendar({
-      container: '#calendar',
-      calendarSize: 'small',
-      initialSelectedDate: null,
-      startWeekday: 1,
-      customMonthValues: [
+      container: '#calendar', // Куда вставлять
+      calendarSize: 'small', // Размер
+      initialSelectedDate: null, // При загрузке ничего не выбрано
+      startWeekday: 1, // Неделя с понедельника
+      customMonthValues: [ // Русские месяцы
         'Январь', 'Февраль', 'Март', 'Апрель',
         'Май', 'Июнь', 'Июль', 'Август',
         'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
       ],
-      customWeekdayValues: [
+      customWeekdayValues: [ // Русские дни недели
         'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'
       ],
+      // Функция, которая срабатывает при клике на дату
       onSelectedDateChange: function (selectedDate) {
         const result = document.getElementById('semesterResult');
 
+        // Если дата не выбрана, пишем подсказку
         if (!selectedDate) {
           result.textContent = 'Выберите дату в календаре.';
           return;
         }
 
+        // Берем сегодняшнюю дату
         const today = new Date();
+        
+        // Переводим обе даты в миллисекунды (чтобы не было проблем с часовыми поясами)
         const todayUtc = Date.UTC(
           today.getFullYear(),
           today.getMonth(),
@@ -500,9 +541,13 @@
           selectedDate.getDate()
         );
 
+        // Считаем разницу в днях (86400000 - это миллисекунды в сутках)
         const daysLeft = Math.round((targetUtc - todayUtc) / 86400000);
+        
+        // Форматируем дату для вывода (ДД.ММ.ГГГГ)
         const formattedDate = selectedDate.toLocaleDateString('ru-RU');
 
+        // Выводим результат в зависимости от разницы
         if (daysLeft > 0) {
           result.textContent =
             'До окончания семестра (' + formattedDate + ') осталось ' +
