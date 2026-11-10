@@ -70,14 +70,13 @@
 </section>
 
 <!-- =========================================================
-     ЗАДАНИЕ 4. Шахматная доска 8x8 (Строго через document.write)
+     ЗАДАНИЕ 4. Шахматная доска 8x8 
      ========================================================= -->
 <section>
   <h2>Задание 4. Шахматная доска</h2>
   <p>Таблица сформирована динамически с помощью <code>document.write</code>:</p>
   
-  <!-- ВАЖНО: Скрипт встроен прямо сюда, в body. 
-       document.write срабатывает во время загрузки и рисует таблицу прямо в этом месте. -->
+
   <script>
     var n = 8; // количество строк и столбцов
     var s;     // для класса black/white
@@ -314,10 +313,15 @@ new Chart(document.getElementById('chartAge'), {
 });
 
 /* ================= ЗАДАНИЕ 8 ================= */
+// Инициализируем ColorCalendar с правильными параметрами
 new ColorCalendar({
-  selector: '#color-calendar',
+  id: "#color-calendar", // Исправлено: вместо selector используем id
   selectedDate: new Date(),
-  onDateSelected: function(date) {
+  // Исправлено: название функции-обработчика события
+  onSelectedDateChange: function(date) { 
+    // Проверка, что дата действительно передалась
+    if (!date) return; 
+    
     var endDate = new Date(date.getFullYear(), 11, 25); // 25 декабря
     var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
     var msg = '';
