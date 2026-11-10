@@ -300,34 +300,41 @@ new Chart(document.getElementById('chartAge'), {
 // Ждем полной загрузки страницы
 document.addEventListener("DOMContentLoaded", function() {
   
-  // Инициализируем календарь библиотеки ColorCalendar
-  new Calendar({ // В новых версиях используется имя Calendar (без "Color")
-    id: "#color-calendar",
-    selectedDate: new Date(),
+  // Функция для расчета и вывода дней
+  function updateDaysLeft(date) {
+    if (!date) return;
     
-    // Функция-обработчик выбора даты
-    onDateSelected: function(date) {
-      if (!date) return;
-      
-      // Берем 25 декабря текущего года как конец семестра
-      var endDate = new Date(date.getFullYear(), 11, 25); 
-      
-      // Вычисляем разницу в днях
-      var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
-      
-      var msg = '';
-      if (diff > 0) {
-        msg = 'До конца семестра осталось ' + diff + ' дней.';
-      } else if (diff === 0) {
-        msg = 'Сегодня последний день семестра!';
-      } else {
-        msg = 'Семестр уже закончился.';
-      }
-      
-      // Выводим сообщение на страницу
-      document.getElementById('days-left').textContent = msg;
+    // Берем 25 декабря текущего года как конец семестра
+    var endDate = new Date(date.getFullYear(), 11, 25); 
+    
+    // Вычисляем разницу в днях
+    var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
+    
+    var msg = '';
+    if (diff > 0) {
+      msg = 'До конца семестра осталось ' + diff + ' дней.';
+    } else if (diff === 0) {
+      msg = 'Сегодня последний день семестра!';
+    } else {
+      msg = 'Семестр уже закончился.';
+    }
+    
+    document.getElementById('days-left').textContent = msg;
+  }
+
+  // Инициализируем календарь
+  new Calendar({
+    id: "#color-calendar",
+    selectedDate: new Date(), // Выделяем сегодняшнюю дату по умолчанию
+    
+    // ВНИМАНИЕ: В этой версии библиотеки правильное имя события - onSelectedDateChange
+    onSelectedDateChange: function(date) {
+      updateDaysLeft(date);
     }
   });
+
+  // Сразу считаем дни для сегодняшней даты при загрузке страницы
+  updateDaysLeft(new Date());
 });
 </script>
 
