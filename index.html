@@ -8,6 +8,10 @@
 <!-- Chart.js для графиков (Задание 7) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- ColorCalendar для календаря (Задание 8) - Версия 1.0.6 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/color-calendar@1.0.6/dist/css/theme-basic.css">
+<script src="https://cdn.jsdelivr.net/npm/color-calendar@1.0.6/dist/bundle.js"></script>
+
 <style>
   /* ===== Стили для задания 4 (шахматная доска) ===== */
   .chess-table { border-collapse: collapse; }
@@ -20,6 +24,9 @@
   section { border-bottom: 1px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px; }
   h2 { color: #333; }
   a { cursor: pointer; }
+  
+  /* Ширина календаря, чтобы он не растягивался */
+  #color-calendar { width: 320px; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -70,15 +77,13 @@
   <p>Таблица сформирована динамически с помощью <code>document.write</code>:</p>
   
   <script>
-    var n = 8; // количество строк и столбцов
-    var s;     // для класса black/white
+    var n = 8;
+    var s;
     
     document.write('<table border="1" class="chess-table">');
-    
     for (let i = 1; i <= n; i++) {
       document.write('<tr>');
       for (let j = 1; j <= n; j++) {
-        // Если сумма индексов четная — белая клетка, иначе черная
         if ((i + j) % 2 === 0) {
           s = 'white';
           document.write('<td class="' + s + '">0</td>');
@@ -147,14 +152,15 @@
 </section>
 
 <!-- =========================================================
-     ЗАДАНИЕ 8. Календарь
+     ЗАДАНИЕ 8. Календарь ColorCalendar
      ========================================================= -->
 <section>
   <h2>Задание 8. Календарь</h2>
-  <p>Выберите дату окончания семестра (например, сегодняшнюю или любую другую):</p>
+  <p>Выберите дату окончания семестра:</p>
   
-  <!-- Используем нативный HTML5 календарь -->
-  <input type="date" id="calendar-input" style="font-size: 16px; padding: 5px;">
+  <!-- Контейнер, в который библиотека вставит календарь -->
+  <div id="color-calendar"></div>
+  
   <p id="days-left" style="font-weight:bold; color: red; margin-top: 10px;"></p>
 </section>
 
@@ -291,37 +297,39 @@ new Chart(document.getElementById('chartAge'), {
 });
 
 /* ================= ЗАДАНИЕ 8 ================= */
-// Ждем загрузки страницы
+// Ждем полной загрузки страницы
 document.addEventListener("DOMContentLoaded", function() {
-  var input = document.getElementById('calendar-input');
-  var output = document.getElementById('days-left');
-
-  // Слушаем изменение даты
-  input.addEventListener('change', function() {
-    if (!input.value) return; // если дата не выбрана
-
-    var selectedDate = new Date(input.value);
+  
+  // Инициализируем календарь библиотеки ColorCalendar
+  new Calendar({ // В новых версиях используется имя Calendar (без "Color")
+    id: "#color-calendar",
+    selectedDate: new Date(),
     
-    // Предположим, семестр заканчивается 25 декабря текущего года
-    var endDate = new Date(selectedDate.getFullYear(), 11, 25); 
-    
-    // Считаем разницу в днях
-    var diff = Math.ceil((endDate - selectedDate) / (1000 * 60 * 60 * 24));
-    
-    var msg = '';
-    if (diff > 0) {
-      msg = 'До конца семестра осталось ' + diff + ' дней.';
-    } else if (diff === 0) {
-      msg = 'Сегодня последний день семестра!';
-    } else {
-      msg = 'Семестр уже закончился.';
+    // Функция-обработчик выбора даты
+    onDateSelected: function(date) {
+      if (!date) return;
+      
+      // Берем 25 декабря текущего года как конец семестра
+      var endDate = new Date(date.getFullYear(), 11, 25); 
+      
+      // Вычисляем разницу в днях
+      var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
+      
+      var msg = '';
+      if (diff > 0) {
+        msg = 'До конца семестра осталось ' + diff + ' дней.';
+      } else if (diff === 0) {
+        msg = 'Сегодня последний день семестра!';
+      } else {
+        msg = 'Семестр уже закончился.';
+      }
+      
+      // Выводим сообщение на страницу
+      document.getElementById('days-left').textContent = msg;
     }
-    output.textContent = msg;
   });
 });
 </script>
 
-</body>
-</html>
 </body>
 </html>
