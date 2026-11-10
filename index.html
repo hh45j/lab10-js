@@ -7,10 +7,10 @@
 <!-- ===== Подключаем библиотеки для заданий 7 и 8 ===== -->
 <!-- Chart.js для графиков -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- ColorCalendar для календаря -->
+
+<!-- ColorCalendar для календаря (официальная сборка) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/color-calendar/dist/css/theme-basic.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/color-calendar/dist/css/theme-glass.css">
-<script src="https://cdn.jsdelivr.net/npm/color-calendar/dist/js/color-calendar.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/color-calendar/dist/bundle.js"></script>
 
 <style>
   /* ===== Стили для задания 4 (шахматная доска) ===== */
@@ -24,6 +24,9 @@
   section { border-bottom: 1px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px; }
   h2 { color: #333; }
   a { cursor: pointer; }
+  
+  /* Контейнер для календаря, чтобы он не растягивался на весь экран */
+  #color-calendar { width: 350px; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -70,13 +73,14 @@
 </section>
 
 <!-- =========================================================
-     ЗАДАНИЕ 4. Шахматная доска 8x8 
+     ЗАДАНИЕ 4. Шахматная доска 8x8 (Строго через document.write)
      ========================================================= -->
 <section>
   <h2>Задание 4. Шахматная доска</h2>
   <p>Таблица сформирована динамически с помощью <code>document.write</code>:</p>
   
-
+  <!-- ВАЖНО: Скрипт встроен прямо сюда, в body. 
+       document.write срабатывает во время загрузки и рисует таблицу прямо в этом месте. -->
   <script>
     var n = 8; // количество строк и столбцов
     var s;     // для класса black/white
@@ -172,7 +176,7 @@
 </section>
 
 <!-- =========================================================
-     ВСЕ ОСТАЛЬНЫЕ СКРИПТЫ (Задания 1, 2, 3, 5, 6, 7, 8)
+     ВСЕ ОСТАЛЬНЫЕ СКРИПТЫ
      ========================================================= -->
 <script>
 /* ================= ЗАДАНИЕ 1 ================= */
@@ -313,31 +317,30 @@ new Chart(document.getElementById('chartAge'), {
 });
 
 /* ================= ЗАДАНИЕ 8 ================= */
-// Инициализируем ColorCalendar с правильными параметрами
-new ColorCalendar({
-  id: "#color-calendar", // Исправлено: вместо selector используем id
-  selectedDate: new Date(),
-  // Исправлено: название функции-обработчика события
-  onSelectedDateChange: function(date) { 
-    // Проверка, что дата действительно передалась
-    if (!date) return; 
-    
-    var endDate = new Date(date.getFullYear(), 11, 25); // 25 декабря
-    var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
-    var msg = '';
-    if (diff > 0) {
-      msg = 'До конца семестра осталось ' + diff + ' дней.';
-    } else if (diff === 0) {
-      msg = 'Сегодня последний день семестра!';
-    } else {
-      msg = 'Семестр уже закончился.';
+// Инициализируем календарь
+document.addEventListener("DOMContentLoaded", function() {
+  new Calendar({ // <-- В новых версиях библиотеки используется имя Calendar
+    id: "#color-calendar",
+    selectedDate: new Date(),
+    onDateSelected: function(date) {
+      if (!date) return;
+      
+      var endDate = new Date(date.getFullYear(), 11, 25); // 25 декабря
+      var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
+      
+      var msg = '';
+      if (diff > 0) {
+        msg = 'До конца семестра осталось ' + diff + ' дней.';
+      } else if (diff === 0) {
+        msg = 'Сегодня последний день семестра!';
+      } else {
+        msg = 'Семестр уже закончился.';
+      }
+      document.getElementById('days-left').textContent = msg;
     }
-    document.getElementById('days-left').textContent = msg;
-  }
+  });
 });
 </script>
 
-</body>
-</html>
 </body>
 </html>
