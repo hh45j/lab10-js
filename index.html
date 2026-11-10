@@ -4,13 +4,9 @@
 <meta charset="UTF-8">
 <title>Лабораторная работа 10 — JavaScript</title>
 
-<!-- ===== Подключаем библиотеки для заданий 7 и 8 ===== -->
-<!-- Chart.js для графиков -->
+<!-- ===== Подключаем библиотеки ===== -->
+<!-- Chart.js для графиков (Задание 7) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- ColorCalendar для календаря (официальная сборка) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/color-calendar/dist/css/theme-basic.css">
-<script src="https://cdn.jsdelivr.net/npm/color-calendar/dist/bundle.js"></script>
 
 <style>
   /* ===== Стили для задания 4 (шахматная доска) ===== */
@@ -19,14 +15,11 @@
   .chess-table .black { background-color: black; color: white; }
   .chess-table .white { background-color: white; color: black; }
 
-  /* Немного общих стилей для красоты */
+  /* Общие стили */
   body { font-family: Arial, sans-serif; margin: 20px; transition: background-color 0.3s, color 0.3s; }
   section { border-bottom: 1px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px; }
   h2 { color: #333; }
   a { cursor: pointer; }
-  
-  /* Контейнер для календаря, чтобы он не растягивался на весь экран */
-  #color-calendar { width: 350px; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -36,15 +29,12 @@
      ========================================================= -->
 <section>
   <h2>Задание 1. Размер шрифта</h2>
-
-  <!-- Гиперссылки с onclick. Возвращаем false, чтобы страница не "прыгала" -->
   <p>
     <a href="#" style="font-size:30px;" onclick="return fontSize(30);">Большой шрифт</a><br>
     <a href="#" style="font-size:20px;" onclick="return fontSize(20);">Средний шрифт</a><br>
     <a href="#" style="font-size:12px;" onclick="return fontSize(12);">Мелкий шрифт</a>
   </p>
 
-  <!-- Абзацы, к которым применяется изменение -->
   <p>JavaScript обычно используется как встраиваемый язык для программного доступа к объектам приложений. Наиболее широкое применение находит в браузерах как язык сценариев для придания интерактивности веб-страницам.</p>
   <p>Самая первая реализация JavaScript была создана Бренданом Эйхом в компании Netscape, и с тех пор обновляется, чтобы соответствовать ECMA-262 Edition 5 и более поздним версиям.</p>
   <p>В статье «The World's Most Misunderstood Programming Language Has Become the World's Most Popular Programming Language» Дуглас Крокфорд утверждает, что лидирующую позицию JavaScript занял в связи с развитием AJAX.</p>
@@ -79,8 +69,6 @@
   <h2>Задание 4. Шахматная доска</h2>
   <p>Таблица сформирована динамически с помощью <code>document.write</code>:</p>
   
-  <!-- ВАЖНО: Скрипт встроен прямо сюда, в body. 
-       document.write срабатывает во время загрузки и рисует таблицу прямо в этом месте. -->
   <script>
     var n = 8; // количество строк и столбцов
     var s;     // для класса black/white
@@ -89,7 +77,6 @@
     
     for (let i = 1; i <= n; i++) {
       document.write('<tr>');
-      
       for (let j = 1; j <= n; j++) {
         // Если сумма индексов четная — белая клетка, иначе черная
         if ((i + j) % 2 === 0) {
@@ -97,14 +84,11 @@
           document.write('<td class="' + s + '">0</td>');
         } else {
           s = 'black';
-          // На черной клетке пишем 1 (она будет белой из-за CSS)
           document.write('<td class="' + s + '">1</td>');
         }
       }
-      
       document.write('</tr>');
     }
-    
     document.write('</table>');
   </script>
 </section>
@@ -146,19 +130,16 @@
 <section>
   <h2>Задание 7. Графики Chart.js</h2>
   
-  <!-- 1. Столбчатая диаграмма: численность населения по городам -->
   <h3>Численность населения по городам</h3>
   <div style="width: 600px; height: 300px;">
     <canvas id="chartCities"></canvas>
   </div>
 
-  <!-- 2. Линейный график: ключевая ставка ЦБ РФ -->
   <h3>Ключевая ставка ЦБ РФ</h3>
   <div style="width: 600px; height: 300px;">
     <canvas id="chartRate"></canvas>
   </div>
 
-  <!-- 3. Круговая диаграмма (доля населения по возрасту) -->
   <h3>Доля населения разного возраста в России</h3>
   <div style="width: 600px; height: 300px;">
     <canvas id="chartAge"></canvas>
@@ -166,17 +147,19 @@
 </section>
 
 <!-- =========================================================
-     ЗАДАНИЕ 8. Календарь ColorCalendar
+     ЗАДАНИЕ 8. Календарь
      ========================================================= -->
 <section>
   <h2>Задание 8. Календарь</h2>
-  <p>Выберите дату окончания семестра:</p>
-  <div id="color-calendar"></div>
-  <p id="days-left" style="font-weight:bold; color: red;"></p>
+  <p>Выберите дату окончания семестра (например, сегодняшнюю или любую другую):</p>
+  
+  <!-- Используем нативный HTML5 календарь -->
+  <input type="date" id="calendar-input" style="font-size: 16px; padding: 5px;">
+  <p id="days-left" style="font-weight:bold; color: red; margin-top: 10px;"></p>
 </section>
 
 <!-- =========================================================
-     ВСЕ ОСТАЛЬНЫЕ СКРИПТЫ
+     ВСЕ СКРИПТЫ
      ========================================================= -->
 <script>
 /* ================= ЗАДАНИЕ 1 ================= */
@@ -245,7 +228,6 @@ function validateFeedback() {
 }
 
 /* ================= ЗАДАНИЕ 7 ================= */
-// 1. Столбчатая диаграмма: население городов
 new Chart(document.getElementById('chartCities'), {
   type: 'bar',
   data: {
@@ -259,9 +241,7 @@ new Chart(document.getElementById('chartCities'), {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      title: { display: true, text: 'Численность населения по городам' }
-    },
+    plugins: { title: { display: true, text: 'Численность населения по городам' } },
     scales: {
       y: { title: { display: true, text: 'Млн человек' } },
       x: { title: { display: true, text: 'Города' } }
@@ -269,7 +249,6 @@ new Chart(document.getElementById('chartCities'), {
   }
 });
 
-// 2. Линейный график: ключевая ставка ЦБ РФ
 new Chart(document.getElementById('chartRate'), {
   type: 'line',
   data: {
@@ -286,9 +265,7 @@ new Chart(document.getElementById('chartRate'), {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      title: { display: true, text: 'Изменение ключевой ставки Центробанка РФ' }
-    },
+    plugins: { title: { display: true, text: 'Изменение ключевой ставки Центробанка РФ' } },
     scales: {
       y: { title: { display: true, text: 'Процент' } },
       x: { title: { display: true, text: 'Год' } }
@@ -296,7 +273,6 @@ new Chart(document.getElementById('chartRate'), {
   }
 });
 
-// 3. Круговая диаграмма по возрасту
 new Chart(document.getElementById('chartAge'), {
   type: 'pie',
   data: {
@@ -310,37 +286,42 @@ new Chart(document.getElementById('chartAge'), {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      title: { display: true, text: 'Доля населения разного возраста в России' }
-    }
+    plugins: { title: { display: true, text: 'Доля населения разного возраста в России' } }
   }
 });
 
 /* ================= ЗАДАНИЕ 8 ================= */
-// Инициализируем календарь
+// Ждем загрузки страницы
 document.addEventListener("DOMContentLoaded", function() {
-  new Calendar({ 
-    id: "#color-calendar",
-    selectedDate: new Date(),
-    onDateSelected: function(date) {
-      if (!date) return;
-      
-      var endDate = new Date(date.getFullYear(), 11, 25); // 25 декабря
-      var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
-      
-      var msg = '';
-      if (diff > 0) {
-        msg = 'До конца семестра осталось ' + diff + ' дней.';
-      } else if (diff === 0) {
-        msg = 'Сегодня последний день семестра!';
-      } else {
-        msg = 'Семестр уже закончился.';
-      }
-      document.getElementById('days-left').textContent = msg;
+  var input = document.getElementById('calendar-input');
+  var output = document.getElementById('days-left');
+
+  // Слушаем изменение даты
+  input.addEventListener('change', function() {
+    if (!input.value) return; // если дата не выбрана
+
+    var selectedDate = new Date(input.value);
+    
+    // Предположим, семестр заканчивается 25 декабря текущего года
+    var endDate = new Date(selectedDate.getFullYear(), 11, 25); 
+    
+    // Считаем разницу в днях
+    var diff = Math.ceil((endDate - selectedDate) / (1000 * 60 * 60 * 24));
+    
+    var msg = '';
+    if (diff > 0) {
+      msg = 'До конца семестра осталось ' + diff + ' дней.';
+    } else if (diff === 0) {
+      msg = 'Сегодня последний день семестра!';
+    } else {
+      msg = 'Семестр уже закончился.';
     }
+    output.textContent = msg;
   });
 });
 </script>
 
+</body>
+</html>
 </body>
 </html>
