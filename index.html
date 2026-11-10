@@ -315,29 +315,13 @@
       </p>
 
       <div class="charts">
-        <!-- 1 -->
+        <!-- 1. Столбчатая диаграмма -->
         <div class="chart-box">
           <canvas id="cityChart"></canvas>
         </div>
-        <!-- 2 -->
-        <div class="chart-box">
-          <canvas id="carChart"></canvas>
-        </div>
-        <!-- 3 -->
-        <div class="chart-box">
-          <canvas id="bubbleChart"></canvas>
-        </div>
-        <!-- 4 -->
+        <!-- 2. Линейный график -->
         <div class="chart-box">
           <canvas id="rateChart"></canvas>
-        </div>
-        <!-- 5 -->
-        <div class="chart-box">
-          <canvas id="radarChart"></canvas>
-        </div>
-        <!-- 6 -->
-        <div class="chart-box">
-          <canvas id="stockChart"></canvas>
         </div>
       </div>
     </section>
@@ -408,8 +392,7 @@
       }
     }
 
-    // Задание 6: проверяем, что сообщение заполнено,
-    // а адрес содержит @ и точку после @.
+    // Задание 6: проверяем, что сообщение заполнено, а адрес содержит @ и точку.
     function validateFeedback() {
       const email = document.getElementById('email').value.trim();
       const message = document.getElementById('message').value.trim();
@@ -437,7 +420,7 @@
       result.textContent = 'Форма заполнена корректно.';
     }
 
-    // Задание 7: 1. Столбчатая диаграмма (Города)
+    // Задание 7: 1. Столбчатая диаграмма (Численность населения)
     new Chart(document.getElementById('cityChart'), {
       type: 'bar',
       data: {
@@ -445,86 +428,21 @@
         datasets: [{
           label: 'Население, млн человек',
           data: [12, 7, 5, 3],
-          backgroundColor: ['#5b8def', '#55b894', '#f2a65a', '#d96c75'],
-          borderColor: ['#3767c5', '#328364', '#bd7430', '#ad4650'],
-          borderWidth: 1
+          backgroundColor: ['#5b8def', '#55b894', '#f2a65a', '#d96c75']
         }]
       },
       options: {
-        responsive: true,
         plugins: {
-          title: {
-            display: true,
-            text: 'Численность населения по городам'
-          }
+          title: { display: true, text: 'Численность населения по городам' }
         },
         scales: {
           x: { title: { display: true, text: 'Города' } },
-          y: { beginAtZero: true, title: { display: true, text: 'Население, млн человек' } }
+          y: { beginAtZero: true, title: { display: true, text: 'Население, млн' } }
         }
       }
     });
 
-    // Задание 7: 2. Столбчатая диаграмма (Автоконцерны)
-    new Chart(document.getElementById('carChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Концерн А', 'Концерн Б', 'Концерн В', 'Концерн Г'],
-        datasets: [{
-          label: 'Условный индекс популярности',
-          data: [85, 72, 61, 48],
-          backgroundColor: ['#9b6ee8', '#e76f9a', '#48a9a6', '#e2b93b'],
-          borderColor: ['#7042bc', '#bd4770', '#287e7c', '#ae8c1e'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Популярность автоконцернов'
-          }
-        },
-        scales: {
-          x: { title: { display: true, text: 'Автоконцерны' } },
-          y: { beginAtZero: true, title: { display: true, text: 'Индекс популярности' } }
-        }
-      }
-    });
-
-    // Задание 7: 3. Пузырьковая диаграмма (Возраст населения)
-    new Chart(document.getElementById('bubbleChart'), {
-      type: 'bubble',
-      data: {
-        datasets: [{
-          label: 'Доля населения (%)',
-          data: [
-            { x: 10, y: 15, r: 10 },
-            { x: 30, y: 40, r: 20 },
-            { x: 50, y: 30, r: 15 },
-            { x: 70, y: 15, r: 8 }
-          ],
-          backgroundColor: 'rgba(255, 99, 132, 0.6)',
-          borderColor: 'rgba(255, 99, 132, 1)'
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Возраст населения России'
-          }
-        },
-        scales: {
-          x: { title: { display: true, text: 'Возраст (лет)' } },
-          y: { title: { display: true, text: 'Процент (%)' } }
-        }
-      }
-    });
-
-    // Задание 7: 4. Линейный график (Ключевая ставка)
+    // Задание 7: 2. Линейный график (Ключевая ставка)
     new Chart(document.getElementById('rateChart'), {
       type: 'line',
       data: {
@@ -538,78 +456,12 @@
         }]
       },
       options: {
-        responsive: true,
         plugins: {
-          title: {
-            display: true,
-            text: 'Ключевая ставка ЦБ РФ'
-          }
+          title: { display: true, text: 'Изменение ключевой ставки ЦБ РФ' }
         },
         scales: {
           x: { title: { display: true, text: 'Месяц' } },
-          y: { title: { display: true, text: 'Процент' } }
-        }
-      }
-    });
-
-    // Задание 7: 5. Радар (Сравнение городов)
-    new Chart(document.getElementById('radarChart'), {
-      type: 'radar',
-      data: {
-        labels: ['Экология', 'Транспорт', 'Цены', 'Работа', 'Отдых'],
-        datasets: [
-          {
-            label: 'Город А',
-            data: [80, 70, 60, 90, 75],
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'red'
-          },
-          {
-            label: 'Город Б',
-            data: [60, 85, 80, 70, 90],
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'blue'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Условия для проживания в городах'
-          }
-        },
-        scales: {
-          r: { title: { display: true, text: 'Оценка (0-100)' } }
-        }
-      }
-    });
-
-    // Задание 7: 6. Точечный график (Акции)
-    new Chart(document.getElementById('stockChart'), {
-      type: 'scatter',
-      data: {
-        datasets: [{
-          label: 'Цена акции',
-          data: [
-            { x: 1, y: 150 }, { x: 2, y: 155 }, { x: 3, y: 148 },
-            { x: 4, y: 160 }, { x: 5, y: 165 }
-          ],
-          backgroundColor: 'green'
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Изменение цены акций Газпрома'
-          }
-        },
-        scales: {
-          x: { title: { display: true, text: 'День' } },
-          y: { title: { display: true, text: 'Цена (руб.)' } }
+          y: { title: { display: true, text: 'Процент (%)' } }
         }
       }
     });
