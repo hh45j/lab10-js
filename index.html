@@ -20,7 +20,7 @@
   .chess-table .white { background-color: white; color: black; }
 
   /* Немного общих стилей для красоты */
-  body { font-family: Arial, sans-serif; margin: 20px; }
+  body { font-family: Arial, sans-serif; margin: 20px; transition: background-color 0.3s, color 0.3s; }
   section { border-bottom: 1px dashed #ccc; padding-bottom: 20px; margin-bottom: 20px; }
   h2 { color: #333; }
   a { cursor: pointer; }
@@ -42,9 +42,9 @@
   </p>
 
   <!-- Абзацы, к которым применяется изменение -->
-  <p id="p1">JavaScript обычно используется как встраиваемый язык для программного доступа к объектам приложений. Наиболее широкое применение находит в браузерах как язык сценариев для придания интерактивности веб-страницам.</p>
-  <p id="p2">Самая первая реализация JavaScript была создана Бренданом Эйхом в компании Netscape, и с тех пор обновляется, чтобы соответствовать ECMA-262 Edition 5 и более поздним версиям.</p>
-  <p id="p3">В статье «The World's Most Misunderstood Programming Language Has Become the World's Most Popular Programming Language» Дуглас Крокфорд утверждает, что лидирующую позицию JavaScript занял в связи с развитием AJAX.</p>
+  <p>JavaScript обычно используется как встраиваемый язык для программного доступа к объектам приложений. Наиболее широкое применение находит в браузерах как язык сценариев для придания интерактивности веб-страницам.</p>
+  <p>Самая первая реализация JavaScript была создана Бренданом Эйхом в компании Netscape, и с тех пор обновляется, чтобы соответствовать ECMA-262 Edition 5 и более поздним версиям.</p>
+  <p>В статье «The World's Most Misunderstood Programming Language Has Become the World's Most Popular Programming Language» Дуглас Крокфорд утверждает, что лидирующую позицию JavaScript занял в связи с развитием AJAX.</p>
 </section>
 
 <!-- =========================================================
@@ -70,12 +70,40 @@
 </section>
 
 <!-- =========================================================
-     ЗАДАНИЕ 4. Шахматная доска 8x8
+     ЗАДАНИЕ 4. Шахматная доска 8x8 (Строго через document.write)
      ========================================================= -->
 <section>
   <h2>Задание 4. Шахматная доска</h2>
-  <div id="chess-container"></div>
-  <!-- Скрипт доски — ниже, в общем блоке script -->
+  <p>Таблица сформирована динамически с помощью <code>document.write</code>:</p>
+  
+  <!-- ВАЖНО: Скрипт встроен прямо сюда, в body. 
+       document.write срабатывает во время загрузки и рисует таблицу прямо в этом месте. -->
+  <script>
+    var n = 8; // количество строк и столбцов
+    var s;     // для класса black/white
+    
+    document.write('<table border="1" class="chess-table">');
+    
+    for (let i = 1; i <= n; i++) {
+      document.write('<tr>');
+      
+      for (let j = 1; j <= n; j++) {
+        // Если сумма индексов четная — белая клетка, иначе черная
+        if ((i + j) % 2 === 0) {
+          s = 'white';
+          document.write('<td class="' + s + '">0</td>');
+        } else {
+          s = 'black';
+          // На черной клетке пишем 1 (она будет белой из-за CSS)
+          document.write('<td class="' + s + '">1</td>');
+        }
+      }
+      
+      document.write('</tr>');
+    }
+    
+    document.write('</table>');
+  </script>
 </section>
 
 <!-- =========================================================
@@ -114,17 +142,24 @@
      ========================================================= -->
 <section>
   <h2>Задание 7. Графики Chart.js</h2>
+  
   <!-- 1. Столбчатая диаграмма: численность населения по городам -->
   <h3>Численность населения по городам</h3>
-  <canvas id="chartCities" width="600" height="300"></canvas>
+  <div style="width: 600px; height: 300px;">
+    <canvas id="chartCities"></canvas>
+  </div>
 
   <!-- 2. Линейный график: ключевая ставка ЦБ РФ -->
   <h3>Ключевая ставка ЦБ РФ</h3>
-  <canvas id="chartRate" width="600" height="300"></canvas>
+  <div style="width: 600px; height: 300px;">
+    <canvas id="chartRate"></canvas>
+  </div>
 
-  <!-- 3. Пузырьковая диаграмма (вместо неё — круговая по возрасту, т.к. пузырьковая в Chart.js требует других данных) -->
+  <!-- 3. Круговая диаграмма (доля населения по возрасту) -->
   <h3>Доля населения разного возраста в России</h3>
-  <canvas id="chartAge" width="600" height="300"></canvas>
+  <div style="width: 600px; height: 300px;">
+    <canvas id="chartAge"></canvas>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -134,22 +169,20 @@
   <h2>Задание 8. Календарь</h2>
   <p>Выберите дату окончания семестра:</p>
   <div id="color-calendar"></div>
-  <p id="days-left" style="font-weight:bold;"></p>
+  <p id="days-left" style="font-weight:bold; color: red;"></p>
 </section>
 
 <!-- =========================================================
-     ВСЕ СКРИПТЫ
+     ВСЕ ОСТАЛЬНЫЕ СКРИПТЫ (Задания 1, 2, 3, 5, 6, 7, 8)
      ========================================================= -->
 <script>
 /* ================= ЗАДАНИЕ 1 ================= */
 function fontSize(size) {
-  // Получаем все абзацы на странице
   let elems = document.getElementsByTagName('p');
-  // Проходим по каждому и меняем размер шрифта
   for (let i = 0; i < elems.length; i++) {
     elems[i].style.fontSize = size + 'px';
   }
-  return false; // чтобы ссылка не переходила (отменяем действие по умолчанию)
+  return false; 
 }
 
 /* ================= ЗАДАНИЕ 2 ================= */
@@ -171,54 +204,18 @@ function setTheme(theme) {
     body.style.backgroundColor = '#f5f5f5';
     body.style.color = '#000';
   } else {
-    // исходная тема — белый фон, чёрный текст
     body.style.backgroundColor = 'white';
     body.style.color = 'black';
   }
 }
 
-/* ================= ЗАДАНИЕ 4 ================= */
-(function buildChess() {
-  var n = 8;          // размер поля
-  var html = '<table border="1" class="chess-table">';
-  for (let i = 1; i <= n; i++) {
-    html += '<tr>';
-    for (let j = 1; j <= n; j++) {
-      // Если сумма i+j чётная — белая клетка, иначе чёрная
-      var colorClass = ((i + j) % 2 === 0) ? 'white' : 'black';
-      html += '<td class="' + colorClass + '">' + (i + j) % 2 + '</td>';
-    }
-    html += '</tr>';
-  }
-  html += '</table>';
-  // Вставляем таблицу в контейнер
-  document.getElementById('chess-container').innerHTML = html;
-})();
-// Примечание: по заданию нужно было использовать document.write,
-// но document.write после загрузки страницы перезаписывает весь документ.
-// Поэтому здесь используется безопасная вставка в контейнер.
-// Если нужно строго document.write — см. пример ниже в комментарии:
-/*
-var n = 8;
-document.write('<table border="1" class="chess-table">');
-for (let i = 1; i <= n; i++) {
-  document.write('<tr>');
-  for (let j = 1; j <= n; j++) {
-    var cls = ((i + j) % 2 === 0) ? 'white' : 'black';
-    document.write('<td class="' + cls + '">' + (i+j)%2 + '</td>');
-  }
-  document.write('</tr>');
-}
-document.write('</table>');
-*/
-
 /* ================= ЗАДАНИЕ 5 ================= */
 function checkAge(age) {
-  if (age == "") age = 0;               // если пусто — считаем 0
-  if (age <= 18) {                       // если возраст <= 18
-    document.forms['ageForm'].age.value = "";  // очищаем поле
+  if (age == "") age = 0;               
+  if (age <= 18) {                       
+    document.forms['ageForm'].age.value = "";  
     alert("Ваш возраст должен быть больше 18");
-    document.forms['ageForm'].age.focus();     // ставим курсор обратно
+    document.forms['ageForm'].age.focus();     
   }
 }
 
@@ -228,13 +225,11 @@ function validateFeedback() {
   var email = form.email.value;
   var message = form.message.value;
 
-  // Проверка, что textarea не пуста
   if (message.trim() === "") {
     alert("Поле «Сообщение» не должно быть пустым!");
     return false;
   }
 
-  // Проверка email: есть @ и точка после него в правильной позиции
   var atPos = email.indexOf("@");
   var dotPos = email.lastIndexOf(".");
   if (atPos < 1 || dotPos < atPos + 2 || dotPos + 2 >= email.length) {
@@ -243,7 +238,7 @@ function validateFeedback() {
   }
 
   alert("Форма отправлена успешно!");
-  return false; // отменяем реальную отправку (для демо)
+  return false; 
 }
 
 /* ================= ЗАДАНИЕ 7 ================= */
@@ -259,6 +254,8 @@ new Chart(document.getElementById('chartCities'), {
     }]
   },
   options: {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: { display: true, text: 'Численность населения по городам' }
     },
@@ -284,6 +281,8 @@ new Chart(document.getElementById('chartRate'), {
     }]
   },
   options: {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: { display: true, text: 'Изменение ключевой ставки Центробанка РФ' }
     },
@@ -306,6 +305,8 @@ new Chart(document.getElementById('chartAge'), {
     }]
   },
   options: {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: { display: true, text: 'Доля населения разного возраста в России' }
     }
@@ -313,13 +314,11 @@ new Chart(document.getElementById('chartAge'), {
 });
 
 /* ================= ЗАДАНИЕ 8 ================= */
-// Инициализируем ColorCalendar
 new ColorCalendar({
   selector: '#color-calendar',
   selectedDate: new Date(),
   onDateSelected: function(date) {
-    // Дата окончания семестра — например, 25 декабря текущего года
-    var endDate = new Date(date.getFullYear(), 11, 25); // 11 = декабрь
+    var endDate = new Date(date.getFullYear(), 11, 25); // 25 декабря
     var diff = Math.ceil((endDate - date) / (1000 * 60 * 60 * 24));
     var msg = '';
     if (diff > 0) {
@@ -334,5 +333,7 @@ new ColorCalendar({
 });
 </script>
 
+</body>
+</html>
 </body>
 </html>
